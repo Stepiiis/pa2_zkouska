@@ -50,6 +50,9 @@ CLinkedList<T>::~CLinkedList() {
 
 template<class T>
 CNode<T> * CLinkedList<T>::addNode(const std::string & key,T value) {
+    auto* check = at(key);
+    if (check != nullptr)
+        throw std::range_error("CLinkedList::addNode");
    if(_currentSize >= _size){
        auto * temp =  _last;
        _last->nextOrder = new CNode<T>(key, value);
@@ -155,9 +158,9 @@ bool CLinkedList<T>::erase(const std::string &key) {
 template <class T>
 class CHashSet {
 private:
-    CLinkedList<T>* _table;
+    CLinkedList<T>* _table = nullptr;
     size_t _size;
-    CNode<T>* idLastAdded;
+    CNode<T>* idLastAdded = nullptr;
 public:
     explicit CHashSet(int size);
     ~CHashSet();
@@ -193,10 +196,10 @@ template<class T>
 bool CHashSet<T>::insert(std::string key, T value) {
     size_t index = hash(key);
     auto* temp = _table[index].addNode(key,value);
-    if(temp != nullptr)
-        return false;
+    if(temp == nullptr)
+        throw std::out_of_range("CHashSet::insert");
     if(idLastAdded != nullptr)
-        idLastAdded->nextKey==key;
+        idLastAdded->nextKey=key;
     idLastAdded = temp;
     return true;
 }
@@ -261,7 +264,8 @@ int main(void){
     CHashSet<int> setTest(64);
 
     assert(setTest.insert("ASDFD", 123));
-    assert(!setTest.insert("ASDFD", 123));
+    try{setTest.insert("ASDFD", 123);}
+    catch(std::range_error&){ std::cout << "error caught correctly" << std::endl; }
 
 
 
