@@ -74,5 +74,5 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-/.idea/
-/cmake-build-debug/
+hashtable/.idea/
+hashtable/cmake-build-debug/
