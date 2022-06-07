@@ -16,7 +16,7 @@ struct CNode {
         this->key = "";
     }
     void setNextKey(const std::string& key);
-
+    CNode(const CNode<T>& rhs);
     explicit CNode(const std::string& key, T value) {
         this->key = key;
         this->_value = value;
@@ -38,6 +38,13 @@ struct CNode {
 template<class T>
 void CNode<T>::setNextKey(const std::string &key) {
     nextKey = key;
+}
+template<class T>
+CNode<T>::CNode(const CNode<T>& rhs){
+    nextOrder=rhs.nextOrder;
+    prevOrder=rhs.prevOrder;
+    key=rhs.key;
+    nextKey=rhs.nextKey;
 }
 
 // láďovo hashFunkce
