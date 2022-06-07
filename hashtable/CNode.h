@@ -5,15 +5,17 @@ template<class T>
 struct CNode {
     CNode* nextOrder;
     CNode* prevOrder;
-    std::string nextKey;
+    CNode* nextKey;
     std::string key;
+    bool valid = true;
     T _value;
     CNode();
-    void setNextKey(const std::string& key);
+    void setNextKey(const CNode<T> &key);
     CNode(const CNode<T>& rhs);
     // destruktor delat nebudu protoze jsem linej;
     explicit CNode(const std::string& key, T value) ;
     CNode<T> & operator = (const CNode<T>& rhs);
+
 };
 
 
@@ -23,6 +25,7 @@ CNode<T>::CNode() {
     this->prevOrder = nullptr;
     this->nextKey = "";
     this->key = "";
+    this->valid = true;
 }
 
 template<class T>
@@ -31,6 +34,7 @@ CNode<T>::CNode(const std::string &key, T value) {
     this->_value = value;
     this->nextOrder = nullptr;
     this->prevOrder = nullptr;
+    this->valid = true;
 }
 
 template<class T>
@@ -39,6 +43,7 @@ CNode<T>::CNode(const CNode<T>& rhs){
     prevOrder=rhs.prevOrder;
     key=rhs.key;
     nextKey=rhs.nextKey;
+    valid=rhs.valid;
 }
 
 
@@ -55,10 +60,7 @@ CNode<T> &CNode<T>::operator=(const CNode<T> &rhs) {
     }
 }
 
-template<class T>
-void CNode<T>::setNextKey(const std::string &key) {
-    nextKey = key;
-}
+
 
 // láďovo hashFunkce
 class hashFunc

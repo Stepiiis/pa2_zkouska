@@ -1,7 +1,6 @@
 #include "CHashSet.h"
 
 
-
 template<class T>
 CHashSet<T>::CHashSet(int size):_size(size) {
     this->_table = new CLinkedList<T>[size]();
@@ -26,7 +25,7 @@ bool CHashSet<T>::insert(std::string key, T value) {
     if(temp == nullptr)
         throw std::out_of_range("CHashSet::insert");
     if(idLastAdded != nullptr)
-        idLastAdded->nextKey=key;
+        idLastAdded->nextKey=temp;
     idLastAdded = temp;
     return true;
 }
@@ -65,3 +64,4 @@ bool CHashSet<T>::isInSet(std::string key) {
         return false;
     return true;
 }
+

@@ -102,13 +102,14 @@ bool CLinkedList<T>::erase(const std::string &key) {
     auto * found = this[key];
     if ( found == nullptr )
         return false;
-    auto * prev = found->prevOrder;
-    auto * next = found->nextOrder;
-    if(prev != nullptr)
-        prev->nextOrder = next;
-    if(next != nullptr)
-        next->prevOrder = prev;
-    delete found;
+    found->valid = false;
+//    auto * prev = found->prevOrder;
+//    auto * next = found->nextOrder;
+//    if(prev != nullptr)
+//        prev->nextOrder = next;
+//    if(next != nullptr)
+//        next->prevOrder = prev;
+//    delete found;
     return true;
 }
 

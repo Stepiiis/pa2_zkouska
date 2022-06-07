@@ -40,6 +40,6 @@ CNode<T> &CNode<T>::operator=(const CNode<T> &rhs) {
 }
 
 template<class T>
-void CNode<T>::setNextKey(const std::string &key) {
+void CNode<T>::setNextKey(const CNode<T> &key) {
     nextKey = key;
 }
