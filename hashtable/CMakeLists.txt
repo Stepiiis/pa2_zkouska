@@ -3,6 +3,6 @@ project(hashtable)
 
 set(CMAKE_CXX_STANDARD 17)
 
-include_directories(${PROJECT_SOURCE_DIR})
+#aux_source_directory(. DIR_SRCS) ${DIR_SRCS}
 add_executable(hashtable
-        main.cpp CHashSet.cpp)
+        main.cpp  )

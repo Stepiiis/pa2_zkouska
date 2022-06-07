@@ -52,14 +52,6 @@ build cmake_object_order_depends_target_hashtable: phony || CMakeFiles/hashtable
 build CMakeFiles/hashtable.dir/main.cpp.o: CXX_COMPILER__hashtable_Debug /home/stepis/Skola/pa2_zkouska/hashtable/main.cpp || cmake_object_order_depends_target_hashtable
   DEP_FILE = CMakeFiles/hashtable.dir/main.cpp.o.d
   FLAGS = -g -std=gnu++17
-  INCLUDES = -I/home/stepis/Skola/pa2_zkouska/hashtable
-  OBJECT_DIR = CMakeFiles/hashtable.dir
-  OBJECT_FILE_DIR = CMakeFiles/hashtable.dir
-
-build CMakeFiles/hashtable.dir/CHashSet.cpp.o: CXX_COMPILER__hashtable_Debug /home/stepis/Skola/pa2_zkouska/hashtable/CHashSet.cpp || cmake_object_order_depends_target_hashtable
-  DEP_FILE = CMakeFiles/hashtable.dir/CHashSet.cpp.o.d
-  FLAGS = -g -std=gnu++17
-  INCLUDES = -I/home/stepis/Skola/pa2_zkouska/hashtable
   OBJECT_DIR = CMakeFiles/hashtable.dir
   OBJECT_FILE_DIR = CMakeFiles/hashtable.dir
 
@@ -71,7 +63,7 @@ build CMakeFiles/hashtable.dir/CHashSet.cpp.o: CXX_COMPILER__hashtable_Debug /ho
 #############################################
 # Link the executable hashtable
 
-build hashtable: CXX_EXECUTABLE_LINKER__hashtable_Debug CMakeFiles/hashtable.dir/main.cpp.o CMakeFiles/hashtable.dir/CHashSet.cpp.o
+build hashtable: CXX_EXECUTABLE_LINKER__hashtable_Debug CMakeFiles/hashtable.dir/main.cpp.o
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/hashtable.dir
   POST_BUILD = :
