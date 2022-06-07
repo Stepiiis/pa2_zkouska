@@ -15,8 +15,8 @@ class HashMap
 {
     struct HTab 
     { 
-      Key key; 
-      Val val; 
+      Key key;
+      Val val;
     };
     HTab *hTab; // hash table, dyn. allocated
     int m; // hash table size
