@@ -5,4 +5,4 @@ set(CMAKE_CXX_STANDARD 17)
 
 #aux_source_directory(. DIR_SRCS) ${DIR_SRCS}
 add_executable(hashtable
-        main.cpp  )
+        CHashFitWiki.cpp  )
