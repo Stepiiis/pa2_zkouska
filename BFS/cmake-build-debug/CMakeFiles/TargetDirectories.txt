@@ -1,0 +1,3 @@
+/home/stepis/Skola/pa2_zkouska/BFS/cmake-build-debug/CMakeFiles/BFS.dir
+/home/stepis/Skola/pa2_zkouska/BFS/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/stepis/Skola/pa2_zkouska/BFS/cmake-build-debug/CMakeFiles/rebuild_cache.dir

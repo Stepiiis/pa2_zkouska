@@ -5,10 +5,28 @@
 template<typename A,typename T>
 class CBinTree{
     struct CNode{
+        CNode* _parent = nullptr;
         CNode* _right = nullptr;
         CNode* _left = nullptr;
-        A _key;
-        std::vector<std::pair<A,T>> _value;
+        A _key{};
+        T _value;
+        CNode & operator=(const CNode & rhs){if(this == rhs){return *this;} _parent = rhs._parent; _right = rhs._parent; _left =rhs._left; _key = rhs._key; _value = rhs._value; return *this;}
+    };
+    class Iterator {
+    private:
+        CNode* m_ptr = nullptr;
+    public:
+        explicit Iterator(CNode* pointer);
+        Iterator operator++();
+        Iterator operator++(int);
+        Iterator operator--();
+        Iterator operator--(int);
+        Iterator operator=(const Iterator & rhs);
+        friend bool operator!=(const Iterator& lhs,const Iterator &rhs){return lhs.m_ptr!=rhs.m_ptr;}
+        friend bool operator==(const Iterator& lhs,const Iterator &rhs){return lhs.m_ptr==rhs.m_ptr;}
+        CNode * move(CNode* ptr);
+        T * operator->(); // returns *this
+        T operator *(); // returns this
     };
 public:
     CBinTree() = default;
@@ -17,13 +35,126 @@ public:
     bool isInTree(A key);
     T& find(A key)const;
     bool remove(A key);
+    void clear();
     A getSmallest() const;
     A getBiggest() const;
+    Iterator begin(){return Iterator(_root);}
+    Iterator end(){ return Iterator(nullptr);}
 private:
     CNode* _root = nullptr;
     void removeNode(CNode* ptr);
 };
 
+template<typename A, typename T>
+CBinTree<A, T>::Iterator::Iterator(CNode *pointer) {
+    m_ptr = pointer;
+    if(m_ptr == nullptr)
+        return;
+    while(m_ptr->_left!=nullptr) {
+        m_ptr = m_ptr->_left;
+    }
+    visited.add(m_ptr->_key,m_ptr->_value);
+}
+
+template<typename A, typename T>
+typename CBinTree<A,T>::Iterator CBinTree<A, T>::Iterator::operator++(int) {
+    auto temp = this;
+    if(visited.isInTree(m_ptr->_key)) {
+        m_ptr = m_ptr->_parent;
+        return *temp;
+    }
+    if(m_ptr->_parent==nullptr) // jsme na vrcholu
+    {
+        m_ptr = m_ptr->_right;
+        visited.add(m_ptr->_key,m_ptr->_value);
+    }
+    else if(m_ptr->_left != nullptr && !visited.isInTree(m_ptr->_left->_key)){
+        m_ptr = m_ptr->_left;
+        m_ptr = move(m_ptr);
+        return *temp;
+    }
+    else if (m_ptr->_left==nullptr && m_ptr->_right!=nullptr && !visited.isInTree(m_ptr->_right->_key)){
+        m_ptr=m_ptr->_right;
+        m_ptr = move(m_ptr);
+        return *temp;
+    }
+    else if(m_ptr->_left == nullptr && m_ptr->_right == nullptr){
+        visited.add(m_ptr->_key,m_ptr->_value);
+        m_ptr = m_ptr->_parent;
+        return *temp;
+    }
+    return *temp;
+}
+
+template<typename A, typename T>
+typename CBinTree<A,T>::CNode * CBinTree<A, T>::Iterator::move(CNode* ptr){
+    auto temp = ptr;
+    if(visited.isInTree(temp->_key)) {
+        temp = temp->_parent;
+        return temp;
+    }
+    if(temp->_parent==nullptr) // jsme na vrcholu
+    {
+        temp = temp->_right;
+    }
+    else if(temp->_left != nullptr && !visited.isInTree(temp->_left->_key)){
+        temp = temp->_left;
+        if(temp->_left != nullptr)
+            temp = move(temp);
+        return temp;
+    }
+    else if (temp->_left==nullptr && temp->_right!=nullptr && !visited.isInTree(temp->_right->_key)){
+        temp=temp->_right;
+        return move(temp);
+    }
+    else if(temp->_left == nullptr && temp->_right == nullptr){
+        temp = temp->_parent;
+        return temp;
+    }
+    return temp;
+}
+
+template<typename A, typename T>
+typename CBinTree<A,T>::Iterator CBinTree<A, T>::Iterator::operator++() {
+    if(visited.isInTree(m_ptr->_key)) {
+        m_ptr = m_ptr->_parent;
+        return *this;
+    }
+    if(m_ptr->_parent==nullptr) // jsme na vrcholu
+    {
+        m_ptr = m_ptr->_right;
+        visited.add(m_ptr->_key,m_ptr->_value);
+        return *this;
+    }
+    else if(m_ptr->_left != nullptr && !visited.isInTree(m_ptr->_left->_key)){
+        m_ptr = m_ptr->_left;
+        if(m_ptr->_left != nullptr)
+            m_ptr = move(m_ptr);
+        return *this;
+    }
+    else if (m_ptr->_right!=nullptr && !visited.isInTree(m_ptr->_right->_key)){
+        m_ptr=m_ptr->_right;
+        if(m_ptr->_left!=nullptr)
+            m_ptr=move(m_ptr);
+        return *this;
+    }
+    else if(m_ptr->_right == nullptr){
+        visited.add(m_ptr->_key,m_ptr->_value);
+        m_ptr = m_ptr->_parent;
+        return *this;
+    }
+    return *this;
+}
+
+template<typename A, typename T>
+T CBinTree<A, T>::Iterator::operator*() {
+    return (m_ptr->_value);
+}
+
+template<typename A, typename T>
+T *CBinTree<A, T>::Iterator::operator->() {
+    return m_ptr;
+}
 
 
 template<typename A, typename T>
@@ -35,7 +166,7 @@ bool CBinTree<A, T>::add(A key, T value) {
         parent = temp;
         if(!(key<temp->_key)&&!(temp->_key<key))
         {
-            temp->_value.emplace_back(key, value);
+            temp->_value = value;
             return false;
         }
         if(key<temp->_key)
@@ -53,8 +184,9 @@ bool CBinTree<A, T>::add(A key, T value) {
         }
     }
     if(_root == nullptr) _root = temp;
+    temp->_parent = parent;
     temp->_key = key;
-    temp->_value.emplace_back(key, value);
+    temp->_value = value;
 
     return true;
 }
@@ -65,11 +197,7 @@ T &CBinTree<A, T>::find(A key) const {
     while(temp!=nullptr)
     {
         if(!(key<temp->_key) && !(temp->_key<key)){
-            for(auto & it: temp->_value)
-            {
-                if(it.first == key)
-                    return it.second;
-            }
+            return temp->_value;
         }
         else if(key<temp->_key)
             temp=temp->_left;
@@ -195,17 +323,22 @@ A CBinTree<A, T>::getBiggest() const {
 
 }
 
+template<typename A, typename T>
+void CBinTree<A, T>::clear() {
+    removeNode(_root);
+}
+
 
 int main(){
     CBinTree<int, int> tree;
-    tree.add(8,1);
-    tree.add(4,1);
-    tree.add(12,1);
-    tree.add(18,1);
-    tree.add(3,1);
-    tree.add(5,1);
-    tree.add(6,1);
-    tree.add(10,1);
+    tree.add(8,8);
+    tree.add(4,4);
+    tree.add(12,12);
+    tree.add(18,18);
+    tree.add(3,3);
+    tree.add(5,5);
+    tree.add(6,6);
+    tree.add(10,10);
     tree.add(11,1234);
     assert(tree.isInTree(11));
     assert(!tree.isInTree(16));
@@ -213,5 +346,8 @@ int main(){
     std:: cout << tree.remove(11) << std::endl;
     std:: cout << tree.getSmallest() << std::endl;
     std:: cout << tree.getBiggest() << std::endl;
+    for(int it: tree){
+        std::cout << it;
+    }
     return EXIT_SUCCESS;
 }
