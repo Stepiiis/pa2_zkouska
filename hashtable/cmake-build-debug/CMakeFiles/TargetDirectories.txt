@@ -1,3 +1,0 @@
-/home/stepis/Skola/pa2_zkouska/hashtable/cmake-build-debug/CMakeFiles/hashtable.dir
-/home/stepis/Skola/pa2_zkouska/hashtable/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/stepis/Skola/pa2_zkouska/hashtable/cmake-build-debug/CMakeFiles/rebuild_cache.dir
